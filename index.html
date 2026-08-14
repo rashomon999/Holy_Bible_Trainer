@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Santa Biblia — Memoriza la Palabra, versículo a versículo</title>
+<meta name="description" content="App gratuita para memorizar la Biblia escribiendo cada frase de memoria. Español e inglés. Descárgala en Google Play.">
+<meta name="theme-color" content="#071a33">
+<link rel="icon" href="/img/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/img/icon-192.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Santa Biblia — Memoriza la Palabra">
+<meta property="og:description" content="Memoriza versículos escribiéndolos de memoria. Español e inglés. Gratis en Google Play.">
+<meta property="og:image" content="/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy-950:#050f22;
+  --navy-900:#071a33;
+  --navy-800:#0b2647;
+  --navy-700:#11365f;
+  --line:rgba(255,255,255,.10);
+  --gold:#f5b729;
+  --gold-soft:#ffd071;
+  --cream:#fdfaf3;
+  --muted:#a8bdda;
+  --sky:#4d9dff;
+  --serif:'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--sans);
+  background:var(--navy-950);
+  color:var(--cream);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+.bg{position:fixed;inset:0;z-index:-2;background:
+   radial-gradient(120% 80% at 50% -10%, #1b4d8f 0%, #0b2647 42%, #050f22 78%);}
+.bg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(45% 30% at 78% 12%, rgba(245,183,41,.16), transparent 70%),
+    radial-gradient(50% 35% at 12% 30%, rgba(77,157,255,.16), transparent 70%);
+}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.045;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+.wrap{width:100%;max-width:1080px;margin:0 auto;padding:0 22px}
+
+/* ---------- language switch ---------- */
+.langbar{position:absolute;top:0;left:0;right:0;display:flex;justify-content:flex-end;padding:16px 22px 0;z-index:5}
+.langswitch{
+  display:inline-flex;align-items:center;gap:2px;padding:3px;
+  border:1px solid var(--line);background:rgba(255,255,255,.06);
+  border-radius:999px;backdrop-filter:blur(8px);
+}
+.langswitch button{
+  font:inherit;font-size:12px;font-weight:600;letter-spacing:.04em;
+  color:#b8cbe6;background:transparent;border:0;cursor:pointer;
+  padding:6px 13px;border-radius:999px;transition:background .2s,color .2s;
+}
+.langswitch button[aria-pressed="true"]{background:rgba(255,255,255,.94);color:#0b2647}
+
+/* ---------- hero ---------- */
+header.hero{padding:clamp(60px,13vw,104px) 0 clamp(30px,6vw,48px);text-align:center;position:relative}
+.icon-wrap{position:relative;display:inline-block;margin-bottom:26px}
+.icon-wrap::before{
+  content:"";position:absolute;inset:-34%;border-radius:50%;
+  background:radial-gradient(circle, rgba(245,183,41,.30), transparent 68%);
+  filter:blur(14px);
+}
+.app-icon{
+  position:relative;width:clamp(96px,24vw,124px);height:auto;display:block;
+  filter:drop-shadow(0 18px 34px rgba(0,0,0,.55));
+}
+.eyebrow{
+  font-size:11.5px;letter-spacing:.20em;text-transform:uppercase;
+  color:var(--gold-soft);font-weight:600;margin-bottom:14px;
+}
+h1{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(38px,10.5vw,68px);line-height:1.04;
+  letter-spacing:-.015em;margin-bottom:16px;
+}
+h1 .gold{
+  background:linear-gradient(100deg,var(--gold-soft),var(--gold) 55%,#e39a00);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.tagline{
+  font-size:clamp(16px,4.3vw,20px);color:#cfe0f7;
+  max-width:34ch;margin:0 auto 26px;
+}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:30px}
+.chip{
+  font-size:12.5px;font-weight:500;color:#cbdcf5;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);
+  padding:6px 13px;border-radius:999px;backdrop-filter:blur(6px);
+}
+
+/* ---------- CTA ---------- */
+.cta{
+  display:inline-flex;align-items:center;gap:13px;
+  background:linear-gradient(160deg,#ffd271,var(--gold) 46%,#e09c04);
+  color:#08182f;text-decoration:none;
+  padding:15px 30px 15px 24px;border-radius:16px;
+  font-weight:700;font-size:clamp(15.5px,4.2vw,17px);letter-spacing:-.01em;
+  box-shadow:0 14px 34px rgba(245,183,41,.28), inset 0 1px 0 rgba(255,255,255,.5);
+  transition:transform .18s ease, box-shadow .18s ease;
+  will-change:transform;
+}
+.cta:hover{transform:translateY(-2px);box-shadow:0 20px 44px rgba(245,183,41,.36), inset 0 1px 0 rgba(255,255,255,.5)}
+.cta:active{transform:translateY(0) scale(.985)}
+.cta svg{flex:0 0 auto}
+.cta .lines{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+.cta .small{font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;opacity:.72}
+.cta .big{font-size:1.06em;font-weight:700}
+.cta-note{margin-top:15px;font-size:13px;color:var(--muted)}
+.cta-note b{color:#dbe8fa;font-weight:600}
+
+/* ---------- features ---------- */
+.features{
+  display:grid;gap:14px;padding:clamp(28px,7vw,56px) 0;
+  grid-template-columns:1fr;
+}
+@media(min-width:720px){.features{grid-template-columns:repeat(3,1fr);gap:18px}}
+.card{
+  border:1px solid var(--line);border-radius:18px;padding:24px 22px;
+  background:linear-gradient(170deg, rgba(255,255,255,.075), rgba(255,255,255,.025));
+  backdrop-filter:blur(8px);
+}
+.card .ico{
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+  background:rgba(245,183,41,.14);border:1px solid rgba(245,183,41,.28);
+  margin-bottom:15px;
+}
+.card h3{font-family:var(--serif);font-weight:600;font-size:19px;margin-bottom:7px;letter-spacing:-.01em}
+.card p{font-size:14.5px;color:var(--muted);line-height:1.55}
+
+/* ---------- verse ---------- */
+.verse{text-align:center;padding:clamp(24px,6vw,44px) 0 clamp(30px,7vw,52px)}
+.verse blockquote{
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:clamp(19px,5.2vw,27px);line-height:1.45;color:#eaf1fb;
+  max-width:26ch;margin:0 auto 14px;letter-spacing:-.01em;
+}
+.verse cite{font-style:normal;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);font-weight:600}
+
+/* ---------- screenshots ---------- */
+.shots-head{text-align:center;margin-bottom:24px}
+.shots-head h2{font-family:var(--serif);font-weight:600;font-size:clamp(24px,6.5vw,34px);letter-spacing:-.015em;margin-bottom:8px}
+.shots-head p{color:var(--muted);font-size:15px}
+.rail{
+  display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:6px 22px 26px;margin:0 -22px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.rail::-webkit-scrollbar{display:none}
+@media(min-width:900px){.rail{justify-content:center}}
+.rail figure{flex:0 0 auto;scroll-snap-align:center;width:min(228px,58vw)}
+.rail img{
+  width:100%;height:auto;display:block;border-radius:20px;
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:0 20px 44px rgba(0,0,0,.5);
+  background:#0b2647;
+}
+.rail figcaption{margin-top:11px;font-size:12.5px;color:var(--muted);text-align:center}
+
+/* ---------- bottom cta ---------- */
+.closing{text-align:center;padding:clamp(28px,7vw,56px) 0 clamp(36px,8vw,64px)}
+.closing h2{font-family:var(--serif);font-weight:600;font-size:clamp(25px,6.8vw,38px);letter-spacing:-.015em;margin-bottom:12px}
+.closing p{color:var(--muted);max-width:38ch;margin:0 auto 26px;font-size:15.5px}
+
+footer{border-top:1px solid var(--line);padding:26px 0 42px;text-align:center;font-size:13px;color:#7f97b8}
+.divider{width:54px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto}
+
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.cta{transition:none}}
+</style>
+</head>
+<body>
+<div class="bg"></div><div class="grain"></div>
+
+<div class="langbar">
+  <div class="langswitch" role="group" aria-label="Idioma / Language">
+    <button type="button" data-lang="es" aria-pressed="true">Español</button>
+    <button type="button" data-lang="en" aria-pressed="false">English</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="icon-wrap">
+      <img class="app-icon" src="/img/icon.png" alt="App icon" width="512" height="512">
+    </div>
+    <p class="eyebrow" data-i18n="eyebrow">Aplicación para Android</p>
+    <h1><span data-i18n="h1a">Santa</span> <span class="gold" data-i18n="h1b">Biblia</span></h1>
+    <p class="tagline" data-i18n="tagline">Memoriza la Palabra escribiendo cada frase de memoria.</p>
+
+    <div class="chips">
+      <span class="chip" data-i18n="chip1">Español &amp; English</span>
+      <span class="chip" data-i18n="chip2">Gratis</span>
+      <span class="chip" data-i18n="chip3">Escribe y verifica</span>
+    </div>
+
+    <a class="cta" href="#" rel="noopener">
+      <svg width="26" height="28" viewBox="0 0 88 100" aria-hidden="true">
+        <path d="M0 0 L57 50 L0 50 Z" fill="#0b1f3d" opacity=".92"/>
+        <path d="M0 100 L57 50 L0 50 Z" fill="#0b1f3d" opacity=".72"/>
+        <path d="M0 0 L88 50 L57 50 Z" fill="#0b1f3d" opacity=".55"/>
+        <path d="M0 100 L88 50 L57 50 Z" fill="#0b1f3d" opacity=".38"/>
+      </svg>
+      <span class="lines">
+        <span class="small" data-i18n="ctaSmall">Disponible en</span>
+        <span class="big">Google Play</span>
+      </span>
+    </a>
+    <p class="cta-note" data-i18n-html="ctaNote">O búscala como <b>“Santa Biblia”</b> en la Play Store.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <section class="features">
+    <div class="card reveal">
+      <div class="ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f5b729" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      </div>
+      <h3 data-i18n="f1t">Escribe de memoria</h3>
+      <p data-i18n="f1b">El versículo aparece dividido en frases en blanco. Las completas una a una y la app verifica al instante.</p>
+    </div>
+    <div class="card reveal">
+      <div class="ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f5b729" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg>
+      </div>
+      <h3 data-i18n="f2t">Español e inglés</h3>
+      <p data-i18n="f2b">Cambia de idioma con un toque y memoriza el mismo pasaje en ambos idiomas.</p>
+    </div>
+    <div class="card reveal">
+      <div class="ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f5b729" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+      </div>
+      <h3 data-i18n="f3t">Tu progreso, visible</h3>
+      <p data-i18n="f3b">Cada pasaje muestra cuántas frases llevas dominadas, para que sepas exactamente dónde retomar.</p>
+    </div>
+  </section>
+
+  <section class="verse reveal">
+    <blockquote data-i18n="verse">“En mi corazón he guardado tus dichos, para no pecar contra ti.”</blockquote>
+    <cite data-i18n="verseRef">Salmo 119:11</cite>
+  </section>
+
+  <section class="shots">
+    <div class="shots-head reveal">
+      <h2 data-i18n="shotsT">Así se ve por dentro</h2>
+      <p data-i18n="shotsB">Desliza para verlo →</p>
+    </div>
+    <div class="rail">
+      <figure><img id="s1" src="/img/shot1.jpg" alt="" width="540" height="1105" loading="lazy"><figcaption data-i18n="cap1">Elige tu pasaje</figcaption></figure>
+      <figure><img id="s2" src="/img/shot3.jpg" alt="" width="540" height="1105" loading="lazy"><figcaption data-i18n="cap2">Completa las frases</figcaption></figure>
+      <figure><img id="s3" src="/img/shot4.jpg" alt="" width="540" height="1105" loading="lazy"><figcaption data-i18n="cap3">Verifica al instante</figcaption></figure>
+      <figure><img id="s4" src="/img/shot2.jpg" alt="" width="540" height="1105" loading="lazy"><figcaption data-i18n="cap4">También en inglés</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="closing reveal">
+    <h2 data-i18n="closeT">Empieza con un versículo</h2>
+    <p data-i18n="closeB">Descárgala gratis y guarda la Palabra donde nadie te la puede quitar.</p>
+    <a class="cta" href="#" rel="noopener">
+      <svg width="26" height="28" viewBox="0 0 88 100" aria-hidden="true">
+        <path d="M0 0 L57 50 L0 50 Z" fill="#0b1f3d" opacity=".92"/>
+        <path d="M0 100 L57 50 L0 50 Z" fill="#0b1f3d" opacity=".72"/>
+        <path d="M0 0 L88 50 L57 50 Z" fill="#0b1f3d" opacity=".55"/>
+        <path d="M0 100 L88 50 L57 50 Z" fill="#0b1f3d" opacity=".38"/>
+      </svg>
+      <span class="lines">
+        <span class="small" data-i18n="ctaSmall">Disponible en</span>
+        <span class="big">Google Play</span>
+      </span>
+    </a>
+  </section>
+
+  <footer><p data-i18n="footer">Santa Biblia · Holy Bible · Hecho con fe</p></footer>
+
+</div>
+
+<script>
+(function(){
+  /* ====== CONFIGURACIÓN — cambia solo estas líneas ====== */
+  var PLAY_URL = "https://play.google.com/store/apps/details?id=com.myshkin.holybible";
+  var AUTO_REDIRECT = false;      // true = salta solo a Google Play
+  var AUTO_REDIRECT_DELAY = 1800; // ms
+  /* ===================================================== */
+
+  var T = {
+    es: {
+      title:"Santa Biblia — Memoriza la Palabra, versículo a versículo",
+      meta:"App gratuita para memorizar la Biblia escribiendo cada frase de memoria. Español e inglés. Descárgala en Google Play.",
+      eyebrow:"Aplicación para Android",
+      h1a:"Santa", h1b:"Biblia",
+      tagline:"Memoriza la Palabra escribiendo cada frase de memoria.",
+      chip1:"Español & English", chip2:"Gratis", chip3:"Escribe y verifica",
+      ctaSmall:"Disponible en",
+      ctaNote:'O búscala como <b>“Santa Biblia”</b> en la Play Store.',
+      f1t:"Escribe de memoria",
+      f1b:"El versículo aparece dividido en frases en blanco. Las completas una a una y la app verifica al instante.",
+      f2t:"Español e inglés",
+      f2b:"Cambia de idioma con un toque y memoriza el mismo pasaje en ambos idiomas.",
+      f3t:"Tu progreso, visible",
+      f3b:"Cada pasaje muestra cuántas frases llevas dominadas, para que sepas exactamente dónde retomar.",
+      verse:"“En mi corazón he guardado tus dichos, para no pecar contra ti.”",
+      verseRef:"Salmo 119:11",
+      shotsT:"Así se ve por dentro", shotsB:"Desliza para verlo →",
+      cap1:"Elige tu pasaje", cap2:"Completa las frases", cap3:"Verifica al instante", cap4:"También en inglés",
+      closeT:"Empieza con un versículo",
+      closeB:"Descárgala gratis y guarda la Palabra donde nadie te la puede quitar.",
+      footer:"Santa Biblia · Holy Bible · Hecho con fe",
+      shots:["/img/shot1.jpg","/img/shot3.jpg","/img/shot4.jpg","/img/shot2.jpg"],
+      alts:["Lista de pasajes en español","Ejercicio con frases en blanco","Versículo completado y verificado","La app en inglés"]
+    },
+    en: {
+      title:"Holy Bible — Memorize the Word, verse by verse",
+      meta:"Free app to memorize the Bible by typing each phrase from memory. English and Spanish. Get it on Google Play.",
+      eyebrow:"Android app",
+      h1a:"Holy", h1b:"Bible",
+      tagline:"Memorize the Word by typing each phrase from memory.",
+      chip1:"English & Español", chip2:"Free", chip3:"Type and check",
+      ctaSmall:"Get it on",
+      ctaNote:'Or search for <b>“Holy Bible”</b> on the Play Store.',
+      f1t:"Type from memory",
+      f1b:"The verse appears split into blank phrases. You fill them in one by one and the app checks your answer instantly.",
+      f2t:"English and Spanish",
+      f2b:"Switch language with one tap and memorize the same passage in both.",
+      f3t:"See your progress",
+      f3b:"Every passage shows how many phrases you have mastered, so you know exactly where to pick up.",
+      verse:"“I have stored up your word in my heart, that I might not sin against you.”",
+      verseRef:"Psalm 119:11",
+      shotsT:"A look inside", shotsB:"Swipe to see →",
+      cap1:"Pick your passage", cap2:"Fill in the phrases", cap3:"Check instantly", cap4:"Also in Spanish",
+      closeT:"Start with one verse",
+      closeB:"Download it free and keep the Word where no one can take it from you.",
+      footer:"Holy Bible · Santa Biblia · Made with faith",
+      shots:["/img/shot2.jpg","/img/shot5.jpg","/img/shot6.jpg","/img/shot1.jpg"],
+      alts:["Passage list in English","Exercise with blank phrases","Verse completed and checked","The app in Spanish"]
+    }
+  };
+
+  function apply(lang){
+    var t = T[lang]; if(!t) return;
+    document.documentElement.lang = lang;
+    document.title = t.title;
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', t.meta);
+
+    var els = document.querySelectorAll('[data-i18n]'), i;
+    for (i=0;i<els.length;i++){
+      var k = els[i].getAttribute('data-i18n');
+      if (t[k] != null) els[i].textContent = t[k];
+    }
+    var elsH = document.querySelectorAll('[data-i18n-html]');
+    for (i=0;i<elsH.length;i++){
+      var kh = elsH[i].getAttribute('data-i18n-html');
+      if (t[kh] != null) elsH[i].innerHTML = t[kh];
+    }
+    for (i=0;i<4;i++){
+      var img = document.getElementById('s'+(i+1));
+      if (img){ img.src = t.shots[i]; img.alt = t.alts[i]; }
+    }
+    var btns = document.querySelectorAll('.langswitch button');
+    for (i=0;i<btns.length;i++){
+      btns[i].setAttribute('aria-pressed', btns[i].getAttribute('data-lang')===lang ? 'true' : 'false');
+    }
+    try { localStorage.setItem('sb_lang', lang); } catch(e){}
+  }
+
+  /* Orden de decisión: 1) ?lang=  2) preferencia guardada  3) idioma del navegador  4) español */
+  var qs = (location.search.match(/[?&]lang=(en|es)/i)||[])[1];
+  var saved = null; try { saved = localStorage.getItem('sb_lang'); } catch(e){}
+  var nav = (navigator.language || navigator.userLanguage || 'es').toLowerCase();
+  var lang = (qs || saved || (nav.indexOf('es') === 0 ? 'es' : 'en')).toLowerCase();
+  if (lang !== 'en' && lang !== 'es') lang = 'es';
+  apply(lang);
+
+  var switchBtns = document.querySelectorAll('.langswitch button');
+  for (var b=0;b<switchBtns.length;b++){
+    switchBtns[b].addEventListener('click', function(){ apply(this.getAttribute('data-lang')); });
+  }
+
+  var links = document.querySelectorAll('.cta');
+  for (var l=0;l<links.length;l++){ links[l].href = PLAY_URL; }
+
+  if (AUTO_REDIRECT){
+    setTimeout(function(){ window.location.href = PLAY_URL; }, AUTO_REDIRECT_DELAY);
+  }
+
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+  }
+})();
+</script>
+</body>
+</html>
