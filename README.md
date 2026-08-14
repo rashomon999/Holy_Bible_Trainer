@@ -16,3 +16,6 @@ Está en dos sitios dentro de `index.html`:
 ## Redirección automática
 En el `<script>` final: `AUTO_REDIRECT = true` hace que la página salte sola
 a Google Play después de `AUTO_REDIRECT_DELAY` milisegundos.
+
+
+link: https://santa-biblia-henna.vercel.app
